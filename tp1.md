@@ -223,11 +223,70 @@ http://10.100.0.75
 ## 3. Make your own meow
 
 🌞 **Vous devez :**
+┌──(kali㉿kali)-[~]
+└─$ mkdir meow && cd meow
+┌──(kali㉿kali)-[~/meow]
+└─$ nano app.py
 
-- construire une image qui
-  - contient `python3`
-  - contient l'application et ses dépendances
-  - lance l'application au démarrage du conteneur
-- écrire un `docker-compose.yml` qui définit le lancement de deux conteneurs :
-  - l'app python
-  - le Redis dont il a besoin
+┌──(kali㉿kali)-[~/meow]
+└─$ nano requirements.txt
+
+┌──(kali㉿kali)-[~/meow]
+└─$ nano Dockerfile
+
+┌──(kali㉿kali)-[~/meow]
+└─$ nano docker-compose.yml
+
+┌──(kali㉿kali)-[~/meow]
+└─$ mkdir templates/
+
+┌──(kali㉿kali)-[~/meow]
+└─$ nano index.html
+
+┌──(kali㉿kali)-[~/meow]
+└─$ docker-compose up --build
+WARN[0000] /home/kali/meow/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion
+[+] Building 1.0s (11/11) FINISHED                                  docker:default
+ => [app internal] load build definition from Dockerfile                      0.0s
+ => => transferring dockerfile: 200B                                          0.0s
+ => [app internal] load metadata for docker.io/library/python:3.11-slim       0.7s
+ => [app internal] load .dockerignore                                         0.0s
+ => => transferring context: 2B                                               0.0s
+ => [app 1/5] FROM docker.io/library/python:3.11-slim@sha256:9358444059ed78e  0.0s
+ => [app internal] load build context                                         0.0s
+ => => transferring context: 596B                                             0.0s
+ => CACHED [app 2/5] WORKDIR /app                                             0.0s
+ => CACHED [app 3/5] COPY requirements.txt .                                  0.0s
+ => CACHED [app 4/5] RUN pip install --no-cache-dir -r requirements.txt       0.0s
+ => [app 5/5] COPY . .                                                        0.0s
+ => [app] exporting to image                                                  0.0s
+ => => exporting layers                                                       0.0s
+ => => writing image sha256:0bdfdebf9040fb91ca92f8c57884aada8890606e8a3d7b97  0.0s
+ => => naming to docker.io/library/meow-app                                   0.0s
+ => [app] resolving provenance for metadata file                              0.0s
+[+] Running 3/3
+ ✔ app                   Built                                                0.0s
+ ✔ Container meow-db-1   Created                                              0.0s
+ ✔ Container meow-app-1  Recreated                                            0.1s
+Attaching to app-1, db-1
+db-1   | 1:C 20 Mar 2026 10:10:48.355 # WARNING Memory overcommit must be enabled! Without it, a background save or replication may fail under low memory condition. Being disabled, it can also cause failures without low memory condition, see https://github.com/jemalloc/jemalloc/issues/1328. To fix this issue add 'vm.overcommit_memory = 1' to /etc/sysctl.conf and then reboot or run the command 'sysctl vm.overcommit_memory=1' for this to take effect.
+db-1   | 1:C 20 Mar 2026 10:10:48.358 * oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+db-1   | 1:C 20 Mar 2026 10:10:48.358 * Redis version=7.4.8, bits=64, commit=00000000, modified=0, pid=1, just started
+db-1   | 1:C 20 Mar 2026 10:10:48.358 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+db-1   | 1:M 20 Mar 2026 10:10:48.359 * monotonic clock: POSIX clock_gettime
+db-1   | 1:M 20 Mar 2026 10:10:48.361 * Running mode=standalone, port=6379.
+db-1   | 1:M 20 Mar 2026 10:10:48.363 * Server initialized
+db-1   | 1:M 20 Mar 2026 10:10:48.364 * Loading RDB produced by version 7.4.8
+db-1   | 1:M 20 Mar 2026 10:10:48.364 * RDB age 52 seconds
+db-1   | 1:M 20 Mar 2026 10:10:48.364 * RDB memory usage when created 0.90 Mb
+db-1   | 1:M 20 Mar 2026 10:10:48.364 * Done loading RDB, keys loaded: 0, keys expired: 0.
+db-1   | 1:M 20 Mar 2026 10:10:48.365 * DB loaded from disk: 0.001 seconds
+db-1   | 1:M 20 Mar 2026 10:10:48.365 * Ready to accept connections tcp
+app-1  |  * Serving Flask app 'app'
+app-1  |  * Debug mode: off
+app-1  | WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+app-1  |  * Running on all addresses (0.0.0.0)
+app-1  |  * Running on http://127.0.0.1:8888
+app-1  |  * Running on http://172.19.0.3:8888
+app-1  | Press CTRL+C to quit
+app-1  | 172.19.0.1 - - [20/Mar/2026 10:10:58] "GET / HTTP/1.1" 200 -
