@@ -34,27 +34,6 @@ hello-world   latest    1b44b5a3e06a   7 months ago   10.1kB
 
 ## 3. Lancement de conteneurs
 
-La commande pour lancer des conteneurs est `docker run`.
-
-Certaines options sont très souvent utilisées :
-
-```bash
-# L'option --name permet de définir un nom pour le conteneur
-$ docker run --name web nginx
-
-# L'option -d permet de lancer un conteneur en tâche de fond
-$ docker run --name web -d nginx
-
-# L'option -v permet de partager un dossier/un fichier entre l'hôte et le conteneur
-$ docker run --name web -d -v /path/to/html:/usr/share/nginx/html nginx
-
-# L'option -p permet de partager un port entre l'hôte et le conteneur
-$ docker run --name web -d -v /path/to/html:/usr/share/nginx/html -p 8888:80 nginx
-# Dans l'exemple ci-dessus, le port 8888 de l'hôte est partagé vers le port 80 du conteneur
-```
-
-🌞 **Utiliser la commande `docker run`** lancer un conteneur `nginx` conf par défaut étou étou, simple pour le moment par défaut il écoute sur le port 80 et propose une page d'accueil le conteneur doit être lancé avec un partage de port le port 9999 de la machine hôte doit rediriger vers le port 80 du conteneur
-
 (kali㉿kali)-[~]
 └─$ docker run --name web -d -p 9999:80 nginx
 
@@ -290,3 +269,53 @@ app-1  |  * Running on http://127.0.0.1:8888
 app-1  |  * Running on http://172.19.0.3:8888
 app-1  | Press CTRL+C to quit
 app-1  | 172.19.0.1 - - [20/Mar/2026 10:10:58] "GET / HTTP/1.1" 200 -
+
+# Part IV : Docker security
+
+Dans cette partie, on va survoler quelques aspects de Docker en terme de sécurité.
+
+
+## 1. Le groupe docker
+
+🌞 **Prouvez que vous pouvez devenir `root`**
+┌──(kali㉿kali)-[~]
+└─$ id
+uid=1000(kali) gid=1000(kali) groups=1000(kali),4(adm),20(dialout),24(cdrom),25(floppy),27(sudo),29(audio),30(dip),44(video),46(plugdev),100(users),101(netdev),103(scanner),107(bluetooth),125(lpadmin),133(wireshark),135(kaboxer),136(vboxsf),137(docker)
+
+┌──(kali㉿kali)-[~]
+└─$ docker run -it alpine sh
+/ # whoami
+root
+/ # cat /etc/shadow
+root:*::0:::::
+bin:!::0:::::
+...
+
+
+
+## 2. Scan de vuln
+
+Il existe des outils dédiés au scan de vulnérabilités dans des images Docker.
+
+C'est le cas de [Trivy](https://github.com/aquasecurity/trivy) par exemple.
+
+🌞 **Utilisez Trivy**
+
+- effectuez un scan de vulnérabilités sur des images précédemment mises en oeuvre :
+  - celle de WikiJS que vous avez build
+  - celle de sa base de données
+  - l'image de Apache que vous avez build
+  - l'image de NGINX officielle utilisée dans la première partie
+
+## 3. Petit benchmark secu
+
+Il existe plusieurs référentiels pour sécuriser une machine donnée qui utilise un OS donné. Un savoir particulièrement recherché pour renforcer la sécurité des serveurs surtout.
+
+Un des référentiels réputé et disponible en libre accès, ce sont [les benchmarks de CIS](https://www.cisecurity.org/cis-benchmarks). Ce sont ni plus ni moins que des guides complets pour sécuriser de façon assez forte une machine qui tourne par exemple sous Debian, Rocky Linux ou bien d'autres.
+
+[Docker développe un petit outil](https://github.com/docker/docker-bench-security) qui permet de vérifier si votre utilisation de Docker est compatible avec les recommandations de CIS.
+
+🌞 **Utilisez l'outil Docker Bench for Security**
+
+- rien à me mettre en rendu, je vous laisse exprimer votre curiosité quant aux résultats
+- ce genre d'outils est cool d'un point de vue pédagogique : chaque check que fait le script c'est un truc à savoir finalement !
