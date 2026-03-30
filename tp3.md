@@ -302,11 +302,7 @@ Last login: Tue Mar 24 14:43:57 2026 from 91.164.176.223
 ## 2. Setup
 
 🌞 **Proposer une conf `sysctl`**
-
-- doit améliorer le niveau de sécurité de la machine
-- proposer au moins 3 paramètres 
-- c'est valide que si vous changez le paramètre par rapport à sa valeur par défaut
-- vous devez comprendre les implications de la conf que vous ajoutez, faites vos recherches
+Pas pu finir sinon j'allais me faire prelever 
 
 ---
 
